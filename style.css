@@ -11,11 +11,11 @@ body,html {
 }
 
 .game-container {
+    display: none;
     width: min(40vh,80vw);
     height: min(40vh,80vw);
     margin: 20vh auto;
     border: solid black 1px;
-    display: grid;
     grid-template: repeat(3,1fr)/repeat(3,1fr);
 }
 
@@ -24,6 +24,7 @@ body,html {
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
 }
 .square[onclick]:hover {
     box-shadow: 0 0 10px grey inset;

@@ -5,9 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="modalstyle.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
 </head>
 <body>
+    <div class="modal-backdrop">
+        <div class="modal intro">
+            <div>choose and press Enter</div>
+            <form>
+                <input type="radio" id="pvp" name="option" value="pvp">
+                <label for="pvp">Player vs Player</label>
+                <span>|</span>
+                <input type="radio" id="pvc" name="option" value="pvc">
+                <label for="pvc">Player vs Computer</label>
+            </form>
+        </div>
+    </div>
+    <div class="player-info">Player <span>X</span>'s turn</div>
     <div class="game-container">
     </div>
     <script src="script.js"></script>
