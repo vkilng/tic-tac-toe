@@ -3,8 +3,11 @@ const handleForm = (() => {
     document.onkeydown = (e) => {
         if(e.key === 'Enter' && document.querySelector('input:checked')) {
             var playersChoice = document.querySelector('input:checked').value;
+            if (playersChoice === 'pvc') {
+                document.querySelector('.player-info').textContent = 'Your turn';
+            }
             document.onkeydown = null;
-            document.querySelector('.game-container').style.display = 'grid';
+            document.querySelector('.container').style.display = 'grid';
             document.querySelector('.modal-backdrop').style.display = 'none';
             handleForm.playersChoice = playersChoice;
         }
@@ -12,6 +15,9 @@ const handleForm = (() => {
     return {playersChoice:''};
 })();
 const game = (() => {
+    const restart = () => {
+        window.location.reload();
+    }
     const checkForWin = () => {
         var winConditions =[
             [0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]
@@ -26,24 +32,44 @@ const game = (() => {
         return null;
     }
     const handleClick = (squareElement) => {
+        var playerInfoSpan = document.querySelector('.player-info span');
+        if (handleForm.playersChoice === 'pvp') {
+            playerInfoSpan.textContent = (gameBoard.xIsNext) ? '2 (O)':'1 (X)';
+        }
         let squareIndex = squareElement.dataset.index;
         gameBoard.boardArray[squareIndex] = (gameBoard.xIsNext) ? 'X':'O';
         gameBoard.displayController();
         gameBoard.xIsNext = !(gameBoard.xIsNext);
         squareElement.removeAttribute('onclick');
+        var playerInfo = document.querySelector('.player-info');
         var result = checkForWin();
         if (result) {
-            document.querySelector('.player-info').textContent = result;
+            playerInfo.textContent = 'Winner: ';
+            if (result === 'X') {
+                if (handleForm.playersChoice === 'pvp') {
+                    playerInfo.textContent += 'Player 1 (X)';
+                } else {
+                    playerInfo.textContent += 'You (X)';
+                }
+            } else {
+                if (handleForm.playersChoice === 'pvp') {
+                    playerInfo.textContent += 'Player 2 (O)';
+                } else {
+                    playerInfo.textContent += 'Compter (O)';
+                }
+            }
             let squares = document.querySelectorAll('.square[onclick]');
             for (let i = 0; i < squares.length; i++) {
                 squares[i].removeAttribute('onclick');
             }
+        } else if (!(document.querySelector('.square[onclick]'))) {
+            playerInfo.textContent = 'It\'s a TIE';
         }
         if (!(gameBoard.xIsNext) && handleForm.playersChoice === 'pvc' && !(result)) {
-            setTimeout(() => computerMove(), 200);
+            setTimeout(() => computerRandomMove(), 200);
         }
     }
-    const computerMove = () => {
+    const computerRandomMove = () => {
         var randomLegalMove = () => {
             var randomSquareIndex = Math.floor(Math.random()*9);
             if (gameBoard.boardArray[randomSquareIndex]) {
@@ -55,16 +81,15 @@ const game = (() => {
         var randomSquareIndex = randomLegalMove();
         var randomSquareSelector = '.square[data-index="'+randomSquareIndex+'"]';
         var randomSquare = document.querySelector(randomSquareSelector);
-        console.log(randomSquareIndex);
         handleClick(randomSquare);
     }
-    return {handleClick};
+    return {restart,handleClick};
 })();
 
 const gameBoard = (() => {
     //var gameBoard = ['X','O','','O','O','X','X','X',''];//dummy game board
     var xIsNext = true;
-    var gameBoardContainer = document.querySelector('.game-container');
+    var gameBoardContainer = document.querySelector('.game-board');
     for (let i = 0; i < 9; i++) {
         let square = document.createElement('div');
         square.className = 'square';
