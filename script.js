@@ -34,12 +34,12 @@ const game = (() => {
     const handleClick = (squareElement) => {
         var playerInfoSpan = document.querySelector('.player-info span');
         if (handleForm.playersChoice === 'pvp') {
-            playerInfoSpan.textContent = (gameBoard.xIsNext) ? '2 (O)':'1 (X)';
+            playerInfoSpan.textContent = (gameBoard.turnOfX) ? '2 (O)':'1 (X)';
         }
         let squareIndex = squareElement.dataset.index;
-        gameBoard.boardArray[squareIndex] = (gameBoard.xIsNext) ? 'X':'O';
+        gameBoard.boardArray[squareIndex] = (gameBoard.turnOfX) ? 'X':'O';
         gameBoard.displayController();
-        gameBoard.xIsNext = !(gameBoard.xIsNext);
+        gameBoard.turnOfX = !(gameBoard.turnOfX);
         squareElement.removeAttribute('onclick');
         var playerInfo = document.querySelector('.player-info');
         var result = checkForWin();
@@ -65,7 +65,7 @@ const game = (() => {
         } else if (!(document.querySelector('.square[onclick]'))) {
             playerInfo.textContent = 'It\'s a TIE';
         }
-        if (!(gameBoard.xIsNext) && handleForm.playersChoice === 'pvc' && !(result)) {
+        if (!(gameBoard.turnOfX) && handleForm.playersChoice === 'pvc' && !(result)) {
             setTimeout(() => computerRandomMove(), 200);
         }
     }
@@ -83,12 +83,13 @@ const game = (() => {
         var randomSquare = document.querySelector(randomSquareSelector);
         handleClick(randomSquare);
     }
+    //const minimax = ()
     return {restart,handleClick};
 })();
 
 const gameBoard = (() => {
     //var gameBoard = ['X','O','','O','O','X','X','X',''];//dummy game board
-    var xIsNext = true;
+    var turnOfX = true;
     var gameBoardContainer = document.querySelector('.game-board');
     for (let i = 0; i < 9; i++) {
         let square = document.createElement('div');
@@ -104,5 +105,5 @@ const gameBoard = (() => {
             squareElements[i].textContent = boardArray[i];
         }
     }
-    return {boardArray,xIsNext,displayController};
+    return {boardArray,turnOfX,displayController};
 })();
