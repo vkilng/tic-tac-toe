@@ -1,17 +1,17 @@
-const game = (() => {
-    const handleForm = (() => {
-        var introForm = document.querySelector('form');
-        document.onkeydown = (e) => {
-            if(e.key === 'Enter' && document.querySelector('input:checked')) {
-                var playersChoice = document.querySelector('input:checked').value;
-                console.log(playersChoice);
-                document.onkeydown = null;
-                document.querySelector('.game-container').style.display = 'grid';
-                document.querySelector('.modal-backdrop').style.display = 'none';
-            }
+const handleForm = (() => {
+    var introForm = document.querySelector('form');
+    document.onkeydown = (e) => {
+        if(e.key === 'Enter' && document.querySelector('input:checked')) {
+            var playersChoice = document.querySelector('input:checked').value;
+            document.onkeydown = null;
+            document.querySelector('.game-container').style.display = 'grid';
+            document.querySelector('.modal-backdrop').style.display = 'none';
+            handleForm.playersChoice = playersChoice;
         }
-    })();
-    var winner = false;
+    }
+    return {playersChoice:''};
+})();
+const game = (() => {
     const checkForWin = () => {
         var winConditions =[
             [0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]
@@ -32,14 +32,31 @@ const game = (() => {
         gameBoard.xIsNext = !(gameBoard.xIsNext);
         squareElement.removeAttribute('onclick');
         var result = checkForWin();
-        if (result && !(winner)) {
+        if (result) {
             document.querySelector('.player-info').textContent = result;
-            winner = true;
             let squares = document.querySelectorAll('.square[onclick]');
             for (let i = 0; i < squares.length; i++) {
                 squares[i].removeAttribute('onclick');
             }
         }
+        if (!(gameBoard.xIsNext) && handleForm.playersChoice === 'pvc' && !(result)) {
+            setTimeout(() => computerMove(), 200);
+        }
+    }
+    const computerMove = () => {
+        var randomLegalMove = () => {
+            var randomSquareIndex = Math.floor(Math.random()*9);
+            if (gameBoard.boardArray[randomSquareIndex]) {
+                return randomLegalMove();
+            } else {
+                return randomSquareIndex;
+            }
+        }
+        var randomSquareIndex = randomLegalMove();
+        var randomSquareSelector = '.square[data-index="'+randomSquareIndex+'"]';
+        var randomSquare = document.querySelector(randomSquareSelector);
+        console.log(randomSquareIndex);
+        handleClick(randomSquare);
     }
     return {handleClick};
 })();
@@ -55,7 +72,7 @@ const gameBoard = (() => {
         gameBoardContainer.append(square);
         square.setAttribute('onclick','game.handleClick(this)');
     }
-    var boardArray = Array(9).fill('');
+    var boardArray = Array(9).fill(null);
     const displayController = () => {
         var squareElements = document.getElementsByClassName('square');
         for (let i=0; i<9; i++) {
