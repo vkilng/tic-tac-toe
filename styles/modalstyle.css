@@ -24,20 +24,19 @@
     user-select: none;
 }
 
-.intro > div {
+.modal > div {
     text-align: center;
 }
-.intro form label{
-    text-align: center;
-    padding: 1vw 2vw;
-    cursor: pointer;
+.options {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 2vw;
+}
+.options button {
+    border: none;
     border-radius: 1vw;
-    font-size: max(15px,0.8rem);
-}
-.intro form label:hover{
+    padding: 2vw;
+    font-size: 1.2rem;
     box-shadow: 0 0 10px grey inset;
+    cursor: pointer;
 }
-.intro form input{
-    display:  none;
-}
-.intro form input:checked + label { box-shadow: 0 0 10px grey inset; }

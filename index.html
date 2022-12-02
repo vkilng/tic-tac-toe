@@ -11,22 +11,20 @@
 </head>
 <body>
     <div class="modal-backdrop">
-        <div class="modal intro">
-            <div>choose and press Enter</div>
-            <form>
-                <input type="radio" id="pvp" name="option" value="pvp">
-                <label for="pvp">Player vs Player</label>
-                <span>|</span>
-                <input type="radio" id="pvc" name="option" value="pvc">
-                <label for="pvc">Player vs Computer</label>
-            </form>
+        <div class="modal">
+            <div>Double click to choose</div>
+            <div class="options">
+                <button value="pvp">
+                    Player vs Player</button>
+                <button value="pvc">
+                    Player vs Computer</button>
+            </div>
         </div>
     </div>
     <div class="container">
-        <button class="restart-button" onclick="game.restart()">Restart Game</button>
-        <div class="player-info">Player <span>1 (X)</span>'s turn</div>
-        <div class="game-board">
-        </div>
+        <button class="restart">Restart Game</button>
+        <div class="turn-info"></div>
+        <div class="board"></div>
     </div>
     <script src="script.js"></script>
 </body>
