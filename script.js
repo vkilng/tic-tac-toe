@@ -71,11 +71,27 @@ const gameController = (gameType) => {
         }
     }
 
+    const computerPlaysRound = () => {
+        const getRandomMove = () => {
+            const emptyCellIndices = [];
+            board.getBoard().forEach((obj,index) => {
+                if (obj.getMarker() === '') emptyCellIndices.push(index);
+            })
+            const randomIndex = Math.floor(Math.random() * emptyCellIndices.length);
+            console.log(emptyCellIndices);
+            console.log(randomIndex);
+            return emptyCellIndices[randomIndex];
+        }
+        playRound(getRandomMove());
+    }
+
     const playRound = (index) => {
         board.setMarker(index,activePlayer.marker);
-        if (checkForWin()) return checkForWin();
+        if (checkForWin()) return;
+        if (checkForTie()) return;
         switchPlayerTurn();
         logNewRound();
+        if (gameType === 'pvc' && activePlayer.name === 'Computer') computerPlaysRound();
     }
     logNewRound();
 
